@@ -1,14 +1,12 @@
 {
   "name": "claviz-charts",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "JavaScript charting library based on SVG.",
-  "main": "lib/index",
-  "types": "lib/index",
   "license": "MIT",
   "scripts": {
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
-    "build": "npm run build:types && npm run build:js && npm run bundle",
+    "build": "tsc --module commonjs && npm run bundle",
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
     "bundle": "rollup -c",
@@ -18,7 +16,9 @@
     "type": "git",
     "url": "git+https://github.com/Claviz/claviz-charts.git"
   },
+  "main": "lib/index",
   "browser": "lib/index.browser.js",
+  "typings": "lib/index.d.ts",
   "bugs": {
     "url": "https://github.com/Claviz/claviz-charts/issues"
   },
@@ -34,6 +34,8 @@
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-commonjs": "^9.2.2",
     "rollup-plugin-node-resolve": "^4.0.1",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-typescript2": "^0.20.1",
     "typescript": "^3.3.3"
   }
 }
