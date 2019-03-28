@@ -1,5 +1,6 @@
 import { ContainerChartOptions, ContainerChartLine } from './models/container-chart-options';
 import { makeSVG, getBox } from './utils';
+import { TinyColor } from '@ctrl/tinycolor';
 
 function getMaxLine(data: ContainerChartLine[]): { line: ContainerChartLine, sum: number } {
     const lineData: { line: ContainerChartLine, sum: number }[] = [];
@@ -74,20 +75,24 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
                     transform:
                         `translate(${pos + labelWidth + settings.padding},${i * (settings.barHeight + settings.padding)})`
                 });
+                const color = settings.data[i].data[j].color;
+                const fontColor = new TinyColor(color).isLight() ? 'black' : 'white';
                 const rect = makeSVG('rect', {
                     x: 0,
                     y: 0,
                     width: settings.data[i].data[j].value * step,
                     height: settings.barHeight,
-                    style: `fill: ${settings.data[i].data[j].color};`,
+                    style: `fill: ${color};`,
                 });
                 const labelBox = makeSVG('text', {
                     x: settings.data[i].data[j].value * step / 2, y: settings.barHeight / 2,
                     'dominant-baseline': 'middle',
-                    'text-anchor': 'middle'
+                    'text-anchor': 'middle',
+                    fill: fontColor
                 });
                 labelBox.innerHTML = `${settings.data[i].data[j].label}`;
                 g.appendChild(rect);
+                console.log(window.getComputedStyle(rect, null).getPropertyValue('fill'));
                 if (getBox(labelBox, svg).width < settings.data[i].data[j].value * step) {
                     g.appendChild(labelBox);
                 }

@@ -19,7 +19,7 @@ const containerChartData = [
                 "value": 2
             },
             {
-                "color": "#999999",
+                "color": "#000",
                 "label": "Heisenbug 6 (4 t)",
                 "value": 6
             },
@@ -54,7 +54,7 @@ const containerChartData = [
     {
         "data": [
             {
-                "color": "#999999",
+                "color": "#000",
                 "label": "Heisenbug 20 (0 t)",
                 "value": 20
             }
