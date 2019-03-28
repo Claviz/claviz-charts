@@ -1,7 +1,7 @@
 export interface ContainerChartOptions {
-    width: number;
-    barHeight: number;
-    padding: number;
+    width?: number;
+    barHeight?: number;
+    padding?: number;
     data: ContainerChartLine[];
 }
 

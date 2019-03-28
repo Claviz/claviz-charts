@@ -1,3 +1,7 @@
 .chart-wrapper {
     border: 1px dashed black;
 }
+
+body {
+    font-family: sans-serif;
+}

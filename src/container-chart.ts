@@ -15,11 +15,11 @@ function getMaxLine(data: ContainerChartLine[]): { line: ContainerChartLine, sum
 };
 
 export function generateContainerChart(parentElement: HTMLElement, options: ContainerChartOptions) {
-    let settings: ContainerChartOptions = {
+    let settings = {
         width: 0,
         barHeight: 60,
         padding: 15,
-        data: [],
+        data: [] as ContainerChartLine[],
     };
 
     const svg = makeSVG('svg', { id: 'graph', style: `width:100%;` });

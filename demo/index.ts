@@ -1,3 +1,5 @@
+import { generateContainerChart } from '../src/index';
+
 const containerChartData = [
     {
         "data": [
@@ -61,11 +63,11 @@ const containerChartData = [
     }
 ];
 
-ClavizCharts.generateContainerChart(document.getElementById('fixed-width'), {
+generateContainerChart(document.getElementById('fixed-width') as HTMLElement, {
     width: 500,
     data: containerChartData,
 });
 
-ClavizCharts.generateContainerChart(document.getElementById('full-width'), {
+generateContainerChart(document.getElementById('full-width') as HTMLElement, {
     data: containerChartData,
 });

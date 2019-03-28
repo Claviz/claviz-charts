@@ -1,24 +1,23 @@
 {
   "name": "claviz-charts",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "JavaScript charting library based on SVG.",
   "license": "MIT",
   "scripts": {
-    "type-check": "tsc --noEmit",
-    "type-check:watch": "npm run type-check -- --watch",
-    "build": "tsc --module commonjs && npm run bundle",
-    "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
-    "bundle": "rollup -c",
-    "bundle:watch": "rollup -c -w"
+    "build": "tsc && build:bundle",
+    "build:bundle": "webpack --config ./webpack/claviz-charts.config.js",
+    "build:demo": "webpack --config ./webpack/demo.config.js",
+    "start": "webpack --config ./webpack/demo.config.js --watch"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Claviz/claviz-charts.git"
   },
   "main": "lib/index",
-  "browser": "lib/index.browser.js",
   "typings": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "bugs": {
     "url": "https://github.com/Claviz/claviz-charts/issues"
   },
@@ -30,12 +29,9 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
     "@babel/preset-env": "^7.4.1",
     "@babel/preset-typescript": "^7.3.3",
-    "rollup": "^1.7.3",
-    "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-commonjs": "^9.2.2",
-    "rollup-plugin-node-resolve": "^4.0.1",
-    "rollup-plugin-sourcemaps": "^0.4.2",
-    "rollup-plugin-typescript2": "^0.20.1",
-    "typescript": "^3.3.3"
+    "babel-loader": "^8.0.4",
+    "typescript": "^3.3.3",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
   }
 }
