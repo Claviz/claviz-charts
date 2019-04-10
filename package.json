@@ -7,7 +7,7 @@
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "webpack --config ./webpack/claviz-charts.config.js --mode=production",
     "build": "npm run build:types && npm run build:js",
-    "start": "webpack --config ./webpack/demo.config.js --watch"
+    "start": "webpack --config ./webpack/demo.config.js  --mode=development --watch"
   },
   "repository": {
     "type": "git",

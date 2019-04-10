@@ -32,15 +32,14 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
     const svg = makeSVG('svg', { class: 'chart' });
     parentElement.appendChild(svg);
 
-    const height = parentElement.getBoundingClientRect().height;
-    let width = svg.getBoundingClientRect().width;
+    let parentDimensions = parentElement.getBoundingClientRect();
     const onResize = () => {
         const maxLine = getMaxLine(settings.data);
         const isHorizontal = settings.orientation === 'horizontal';
-        const dimension = isHorizontal ? (settings.width || width) : (settings.height || height);
+        const dimension = isHorizontal ? (settings.width || parentDimensions.width) : (settings.height || parentDimensions.height);
         const baseSize = getBaseSize(settings.data.map(x => x.label), isHorizontal ? 'width' : 'height', svg);
         const pxPerValue = ((dimension - (baseSize + settings.padding)) - maxLine.line.data.length * settings.padding) / (maxLine.sum);
-        const barSize = ((isHorizontal ? (settings.height || height) : (settings.width || width)) - ((settings.data.length - 1) * settings.padding)) / settings.data.length;
+        const barSize = ((isHorizontal ? (settings.height || parentDimensions.height) : (settings.width || parentDimensions.width)) - ((settings.data.length - 1) * settings.padding)) / settings.data.length;
 
         const newBlocks = makeSVG('g');
         for (let i = 0; i < settings.data.length; i++) {
@@ -83,7 +82,7 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
                 pos += settings.data[i].data[j].value * pxPerValue + settings.padding;
             }
         }
-        svg.setAttribute('height', height.toString());
+        svg.setAttribute('height', parentDimensions.height.toString());
         while (svg.firstChild) {
             svg.firstChild.remove();
         }
@@ -91,8 +90,8 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
     };
 
     window.addEventListener('resize', () => {
-        if (!settings.width) {
-            width = svg.getBoundingClientRect().width;
+        parentDimensions = parentElement.getBoundingClientRect();
+        if ((!settings.width || !settings.height) && parentDimensions.height && parentDimensions.width) {
             onResize();
         }
     });
@@ -140,7 +139,7 @@ function makeBar(x: number, y: number, color: string, width: number, height: num
         barText.setAttribute('transform', `rotate(90, ${width / 2}, ${height / 2})`);
         barContainer.appendChild(barText);
     }
-    if (showTooltip) {
+    if (showTooltip && label) {
         tippy(barContainer, {
             content: label,
             arrow: true,
