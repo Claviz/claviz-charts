@@ -3,6 +3,7 @@ import { makeSVG, getBox } from './utils';
 import { TinyColor } from '@ctrl/tinycolor';
 import tippy from 'tippy.js';
 import 'tippy.js/themes/light-border.css';
+import './styles.css';
 
 function getMaxLine(data: ContainerChartLine[]): { line: ContainerChartLine, sum: number } {
     const lineData: { line: ContainerChartLine, sum: number }[] = [];
@@ -24,17 +25,18 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
         padding: 15,
         data: [] as ContainerChartLine[],
         reversed: false,
-        type: 'horizontal'
+        orientation: 'horizontal',
+        select: (data: any) => { }
     };
 
-    const svg = makeSVG('svg', { style: 'width:100%;' });
+    const svg = makeSVG('svg', { class: 'chart' });
     parentElement.appendChild(svg);
 
     const height = parentElement.getBoundingClientRect().height;
     let width = svg.getBoundingClientRect().width;
     const onResize = () => {
         const maxLine = getMaxLine(settings.data);
-        const isHorizontal = settings.type === 'horizontal';
+        const isHorizontal = settings.orientation === 'horizontal';
         const dimension = isHorizontal ? (settings.width || width) : (settings.height || height);
         const baseSize = getBaseSize(settings.data.map(x => x.label), isHorizontal ? 'width' : 'height', svg);
         const pxPerValue = ((dimension - (baseSize + settings.padding)) - maxLine.line.data.length * settings.padding) / (maxLine.sum);
@@ -75,6 +77,7 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
                     settings.data[i].data[j].label,
                     svg
                 );
+                barContainer.addEventListener('click', () => settings.select(settings.data[i].data[j]));
                 newBlocks.appendChild(barContainer);
 
                 pos += settings.data[i].data[j].value * pxPerValue + settings.padding;
@@ -116,11 +119,15 @@ function makeBar(x: number, y: number, color: string, width: number, height: num
         width: width,
         height: height,
         style: `fill: ${color};`,
+        class: 'bar',
+        rx: 3,
+        ry: 3,
     }));
     const fontColor = new TinyColor(color).isLight() ? 'black' : 'white';
     const barText = makeSVG('text', {
         x: width / 2,
         y: height / 2,
+        class: 'bar-text',
         'dominant-baseline': 'middle',
         'text-anchor': 'middle',
         fill: fontColor

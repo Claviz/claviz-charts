@@ -1,19 +1,19 @@
 {
   "name": "claviz-charts",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "JavaScript charting library based on SVG.",
   "license": "MIT",
   "scripts": {
-    "build": "tsc && npm run build:bundle",
-    "build:bundle": "webpack --config ./webpack/claviz-charts.config.js",
-    "build:demo": "webpack --config ./webpack/demo.config.js",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:js": "webpack --config ./webpack/claviz-charts.config.js --mode=production",
+    "build": "npm run build:types && npm run build:js",
     "start": "webpack --config ./webpack/demo.config.js --watch"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Claviz/claviz-charts.git"
   },
-  "main": "lib/index",
+  "main": "lib/claviz-charts.bundle.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib"

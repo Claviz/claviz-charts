@@ -1,0 +1,16 @@
+.bar {
+    cursor: pointer;
+}
+
+.bar:hover {
+    opacity: .8;
+    transition: opacity .1s ease-in-out;
+}
+
+.bar-text {
+    pointer-events: none;
+}
+
+.chart {
+    width: 100%;
+}

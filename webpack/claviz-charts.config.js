@@ -5,7 +5,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, '../lib'),
         filename: 'claviz-charts.bundle.js',
-        library: 'ClavizCharts',
+        libraryTarget: 'umd',
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json']
@@ -17,7 +17,6 @@ module.exports = {
             loader: 'babel-loader',
         }, {
             test: /\.css$/,
-            include: /node_modules/,
             loaders: ['style-loader', 'css-loader'],
         }],
     }

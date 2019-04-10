@@ -79,11 +79,12 @@ generateContainerChart(document.getElementById('reversed') as HTMLElement, {
 
 generateContainerChart(document.getElementById('vertical') as HTMLElement, {
     data: containerChartData,
-    type: 'vertical',
+    orientation: 'vertical',
 });
 
 generateContainerChart(document.getElementById('vertical-reversed') as HTMLElement, {
     data: containerChartData,
     reversed: true,
-    type: 'vertical',
+    orientation: 'vertical',
+    select: (data) => alert(JSON.stringify(data)),
 });

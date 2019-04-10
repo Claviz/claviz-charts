@@ -4,7 +4,8 @@ export interface ContainerChartOptions {
     padding?: number;
     data: ContainerChartLine[];
     reversed?: boolean;
-    type?: 'horizontal' | 'vertical';
+    orientation?: 'horizontal' | 'vertical';
+    select?: (data: any) => any;
 }
 
 export interface ContainerChartLineData {
