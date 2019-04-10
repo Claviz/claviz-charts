@@ -1,6 +1,8 @@
 import { ContainerChartOptions, ContainerChartLine } from './models/container-chart-options';
 import { makeSVG, getBox } from './utils';
 import { TinyColor } from '@ctrl/tinycolor';
+import tippy from 'tippy.js';
+import 'tippy.js/themes/light-border.css';
 
 function getMaxLine(data: ContainerChartLine[]): { line: ContainerChartLine, sum: number } {
     const lineData: { line: ContainerChartLine, sum: number }[] = [];
@@ -18,139 +20,71 @@ function getMaxLine(data: ContainerChartLine[]): { line: ContainerChartLine, sum
 export function generateContainerChart(parentElement: HTMLElement, options: ContainerChartOptions) {
     let settings = {
         width: 0,
-        barHeight: 60,
+        height: 0,
         padding: 15,
         data: [] as ContainerChartLine[],
+        reversed: false,
+        type: 'horizontal'
     };
 
-    const svg = makeSVG('svg', { id: 'graph', style: `width:100%;` });
+    const svg = makeSVG('svg', { style: 'width:100%;' });
     parentElement.appendChild(svg);
-    let blocks = makeSVG('g');
-    svg.appendChild(blocks);
 
-    let box2: (SVGElement | null);
+    const height = parentElement.getBoundingClientRect().height;
     let width = svg.getBoundingClientRect().width;
-    let height = 0;
-    let labelWidth = 0;
     const onResize = () => {
-        height = 0;
-        labelWidth = 0;
-        for (let i = 0; i < settings.data.length; i++) {
-            const box = makeSVG('text', { x: 50, y: settings.barHeight / 2, 'dominant-baseline': 'middle', 'text-anchor': 'middle' });
-            box.innerHTML = `${settings.data[i].label}`;
-            const dimensions = getBox(box, svg);
-            if (dimensions.width > labelWidth) {
-                labelWidth = dimensions.width;
-            }
-        }
-        labelWidth += 10;
         const maxLine = getMaxLine(settings.data);
-        const step =
-            (((settings.width || width) - (labelWidth + settings.padding)) - maxLine.line.data.length * settings.padding) / (maxLine.sum);
+        const isHorizontal = settings.type === 'horizontal';
+        const dimension = isHorizontal ? (settings.width || width) : (settings.height || height);
+        const baseSize = getBaseSize(settings.data.map(x => x.label), isHorizontal ? 'width' : 'height', svg);
+        const pxPerValue = ((dimension - (baseSize + settings.padding)) - maxLine.line.data.length * settings.padding) / (maxLine.sum);
+        const barSize = ((isHorizontal ? (settings.height || height) : (settings.width || width)) - ((settings.data.length - 1) * settings.padding)) / settings.data.length;
 
         const newBlocks = makeSVG('g');
         for (let i = 0; i < settings.data.length; i++) {
             let pos = 0;
 
-            const barHeight = settings.barHeight + settings.padding;
-            height += barHeight;
-            const gg = makeSVG('g', { transform: `translate(${0},${i * barHeight})` });
-            const lineRect = makeSVG('rect', {
-                x: 0,
-                y: 0,
-                width: labelWidth,
-                height: settings.barHeight,
-                style: `fill: lightgrey;`,
-            });
-            const lineBox = makeSVG('text', {
-                x: labelWidth / 2, y: settings.barHeight / 2, 'dominant-baseline': 'middle', 'text-anchor': 'middle'
-            });
-            lineBox.innerHTML = `${settings.data[i].label}`;
-            gg.appendChild(lineRect);
-            gg.appendChild(lineBox);
-            newBlocks.appendChild(gg);
+            const labelX = settings.reversed ? dimension - baseSize : 0;
+            const labelY = i * (barSize + settings.padding);
+            const lineLabelContainer = makeBar(
+                isHorizontal ? labelX : labelY,
+                isHorizontal ? labelY : labelX,
+                'lightgrey',
+                isHorizontal ? baseSize : barSize,
+                isHorizontal ? barSize : baseSize,
+                settings.data[i].label,
+                svg,
+                false,
+            );
+            newBlocks.appendChild(lineLabelContainer);
 
             for (let j = 0; j < settings.data[i].data.length; j++) {
-                const g = makeSVG('g', {
-                    transform:
-                        `translate(${pos + labelWidth + settings.padding},${i * (settings.barHeight + settings.padding)})`
-                });
                 const color = settings.data[i].data[j].color;
-                const fontColor = new TinyColor(color).isLight() ? 'black' : 'white';
-                const rect = makeSVG('rect', {
-                    x: 0,
-                    y: 0,
-                    width: settings.data[i].data[j].value * step,
-                    height: settings.barHeight,
-                    style: `fill: ${color};`,
-                });
-                const labelBox = makeSVG('text', {
-                    x: settings.data[i].data[j].value * step / 2, y: settings.barHeight / 2,
-                    'dominant-baseline': 'middle',
-                    'text-anchor': 'middle',
-                    fill: fontColor
-                });
-                labelBox.innerHTML = `${settings.data[i].data[j].label}`;
-                g.appendChild(rect);
-                console.log(window.getComputedStyle(rect, null).getPropertyValue('fill'));
-                if (getBox(labelBox, svg).width < settings.data[i].data[j].value * step) {
-                    g.appendChild(labelBox);
-                }
-                function onMouseMove(e: (MouseEvent | TouchEvent)) {
-                    let x = 0;
-                    if (e instanceof MouseEvent) {
-                        x = e.clientX - svg.getBoundingClientRect().left;
-                    } else {
-                        x = (e.changedTouches ? e.changedTouches[0].pageX : 0) - svg.getBoundingClientRect().left;
-                    }
-                    let y = i * (settings.barHeight + settings.padding) + settings.barHeight;
-                    const box = makeSVG('foreignObject', {
-                        y,
-                        style: `overflow: visible; width: 100%`,
-                    });
-                    box.innerHTML =
-                        `<div style="background-color: white;display:inline-block;padding:2px 5px;box-shadow: 0 0 1px black;">
-                                ${settings.data[i].data[j].label}
-                        </div>`;
-                    const dimensions = getBox(box.children[0]);
-                    if (x + dimensions.width > svg.getBoundingClientRect().width) {
-                        x = svg.getBoundingClientRect().width - dimensions.width;
-                    }
-                    if (y + dimensions.height > svg.getBoundingClientRect().height) {
-                        y = svg.getBoundingClientRect().height - dimensions.height - settings.padding - settings.barHeight;
-                    }
-                    box.setAttribute('x', `${x}`);
-                    box.setAttribute('y', `${y}`);
-                    if (box2) {
-                        svg.removeChild(box2);
-                        box2 = null;
-                    }
-                    box2 = box;
-                    svg.appendChild(box2);
-                }
-                function onMouseLeave() {
-                    if (box2) {
-                        svg.removeChild(box2);
-                        box2 = null;
-                    }
-                }
-                g.addEventListener('mousemove', onMouseMove);
-                g.addEventListener('touchstart', function (e) {
-                    e.preventDefault();
-                    document.addEventListener('touchmove', onMouseMove, { passive: false });
-                });
-                g.addEventListener('mouseleave', onMouseLeave);
-                g.addEventListener('touchend', () => {
-                    onMouseLeave();
-                    document.removeEventListener('touchmove', onMouseMove);
-                });
-                newBlocks.appendChild(g);
-                pos += settings.data[i].data[j].value * step + settings.padding;
+                const barX = settings.reversed ?
+                    dimension - (pos + baseSize + settings.padding + settings.data[i].data[j].value * pxPerValue) :
+                    baseSize + settings.padding + pos;
+                const barY = i * (barSize + settings.padding);
+                const barWidth = settings.data[i].data[j].value * pxPerValue;
+                const barHeight = barSize;
+                const barContainer = makeBar(
+                    isHorizontal ? barX : barY,
+                    isHorizontal ? barY : barX,
+                    color,
+                    isHorizontal ? barWidth : barHeight,
+                    isHorizontal ? barHeight : barWidth,
+                    settings.data[i].data[j].label,
+                    svg
+                );
+                newBlocks.appendChild(barContainer);
+
+                pos += settings.data[i].data[j].value * pxPerValue + settings.padding;
             }
         }
         svg.setAttribute('height', height.toString());
-        svg.replaceChild(newBlocks, blocks);
-        blocks = newBlocks;
+        while (svg.firstChild) {
+            svg.firstChild.remove();
+        }
+        svg.appendChild(newBlocks);
     };
 
     window.addEventListener('resize', () => {
@@ -171,4 +105,57 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
     changeOptions(options);
 
     return changeOptions;
+}
+
+function makeBar(x: number, y: number, color: string, width: number, height: number, label: string, svg: any, showTooltip: boolean = true) {
+    const barContainer = makeSVG('g', {
+        transform:
+            `translate(${x},${y})`
+    });
+    barContainer.appendChild(makeSVG('rect', {
+        width: width,
+        height: height,
+        style: `fill: ${color};`,
+    }));
+    const fontColor = new TinyColor(color).isLight() ? 'black' : 'white';
+    const barText = makeSVG('text', {
+        x: width / 2,
+        y: height / 2,
+        'dominant-baseline': 'middle',
+        'text-anchor': 'middle',
+        fill: fontColor
+    });
+    barText.innerHTML = `${label}`;
+    const dimensions = getBox(barText, svg);
+    if (dimensions.width < width) {
+        barContainer.appendChild(barText);
+    } else if (dimensions.width < height) {
+        barText.setAttribute('transform', `rotate(90, ${width / 2}, ${height / 2})`);
+        barContainer.appendChild(barText);
+    }
+    if (showTooltip) {
+        tippy(barContainer, {
+            content: label,
+            arrow: true,
+            interactive: true,
+            followCursor: 'horizontal',
+            theme: 'light-border'
+        });
+    }
+
+    return barContainer;
+}
+
+function getBaseSize(labels: string[], dimension: 'height' | 'width', svg: any): number {
+    let baseSize = 0;
+    for (let i = 0; i < labels.length; i++) {
+        const box = makeSVG('text');
+        box.innerHTML = labels[i];
+        const dimensions = getBox(box, svg);
+        if (dimensions[dimension] > baseSize) {
+            baseSize = dimensions[dimension];
+        }
+    }
+    baseSize += 10;
+    return baseSize;
 }

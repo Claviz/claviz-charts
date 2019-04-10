@@ -15,6 +15,10 @@ module.exports = {
             test: /\.(ts|js)x?$/,
             exclude: /node_modules/,
             loader: 'babel-loader',
+        }, {
+            test: /\.css$/,
+            include: /node_modules/,
+            loaders: ['style-loader', 'css-loader'],
         }],
     }
 };

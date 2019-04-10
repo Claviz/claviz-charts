@@ -1,6 +1,6 @@
 {
   "name": "claviz-charts",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "JavaScript charting library based on SVG.",
   "license": "MIT",
   "scripts": {
@@ -30,11 +30,14 @@
     "@babel/preset-env": "^7.4.1",
     "@babel/preset-typescript": "^7.3.3",
     "babel-loader": "^8.0.4",
+    "css-loader": "^2.1.1",
+    "style-loader": "^0.23.1",
     "typescript": "^3.3.3",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
   },
   "dependencies": {
-    "@ctrl/tinycolor": "^2.4.0"
+    "@ctrl/tinycolor": "^2.4.0",
+    "tippy.js": "^4.2.1"
   }
 }

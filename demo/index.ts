@@ -15,8 +15,8 @@ const containerChartData = [
         "data": [
             {
                 "color": "#f37736",
-                "label": "Claviz 2 (1.8 t)",
-                "value": 2
+                "label": "Claviz 4 (1.8 t)",
+                "value": 4
             },
             {
                 "color": "#000",
@@ -57,9 +57,9 @@ const containerChartData = [
                 "color": "#000",
                 "label": "Heisenbug 20 (0 t)",
                 "value": 20
-            }
+            },
         ],
-        "label": "line 4"
+        "label": "line 5"
     }
 ];
 
@@ -70,4 +70,20 @@ generateContainerChart(document.getElementById('fixed-width') as HTMLElement, {
 
 generateContainerChart(document.getElementById('full-width') as HTMLElement, {
     data: containerChartData,
+});
+
+generateContainerChart(document.getElementById('reversed') as HTMLElement, {
+    data: containerChartData,
+    reversed: true
+});
+
+generateContainerChart(document.getElementById('vertical') as HTMLElement, {
+    data: containerChartData,
+    type: 'vertical',
+});
+
+generateContainerChart(document.getElementById('vertical-reversed') as HTMLElement, {
+    data: containerChartData,
+    reversed: true,
+    type: 'vertical',
 });

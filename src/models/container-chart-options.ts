@@ -1,8 +1,10 @@
 export interface ContainerChartOptions {
     width?: number;
-    barHeight?: number;
+    height?: number;
     padding?: number;
     data: ContainerChartLine[];
+    reversed?: boolean;
+    type?: 'horizontal' | 'vertical';
 }
 
 export interface ContainerChartLineData {
