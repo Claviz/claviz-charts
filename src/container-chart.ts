@@ -136,7 +136,7 @@ function makeBar(x: number, y: number, color: string, width: number, height: num
     if (dimensions.width < width) {
         barContainer.appendChild(barText);
     } else if (dimensions.width < height) {
-        barText.setAttribute('transform', `rotate(90, ${width / 2}, ${height / 2})`);
+        barText.setAttribute('transform', `rotate(-90, ${width / 2}, ${height / 2})`);
         barContainer.appendChild(barText);
     }
     if (showTooltip && label) {
