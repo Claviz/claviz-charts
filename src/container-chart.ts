@@ -26,7 +26,8 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
         data: [] as ContainerChartLine[],
         reversed: false,
         orientation: 'horizontal',
-        select: (data: any) => { }
+        select: (data: any) => { },
+        verticalTextTopDown: false,
     };
 
     const svg = makeSVG('svg', { class: 'chart' });
@@ -56,6 +57,7 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
                 settings.data[i].label,
                 svg,
                 undefined,
+                settings.verticalTextTopDown,
                 false,
             );
             newBlocks.appendChild(lineLabelContainer);
@@ -77,6 +79,7 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
                     settings.data[i].data[j].label,
                     svg,
                     settings.data[i].data[j].tooltip,
+                    settings.verticalTextTopDown,
                 );
                 barContainer.addEventListener('click', () => settings.select(settings.data[i].data[j]));
                 newBlocks.appendChild(barContainer);
@@ -111,7 +114,7 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
     return changeOptions;
 }
 
-function makeBar(x: number, y: number, color: string, width: number, height: number, label: string, svg: any, tooltip: string = label, showTooltip: boolean = true) {
+function makeBar(x: number, y: number, color: string, width: number, height: number, label: string, svg: any, tooltip: string = label, verticalTextTopDown: boolean, showTooltip: boolean = true) {
     const barContainer = makeSVG('g', {
         transform:
             `translate(${x},${y})`
@@ -138,7 +141,7 @@ function makeBar(x: number, y: number, color: string, width: number, height: num
     if (dimensions.width < width) {
         barContainer.appendChild(barText);
     } else if (dimensions.width < height) {
-        barText.setAttribute('transform', `rotate(-90, ${width / 2}, ${height / 2})`);
+        barText.setAttribute('transform', `rotate(${verticalTextTopDown ? '' : '-'}90, ${width / 2}, ${height / 2})`);
         barContainer.appendChild(barText);
     }
     if (showTooltip && tooltip) {

@@ -83,6 +83,12 @@ generateContainerChart(document.getElementById('vertical') as HTMLElement, {
     orientation: 'vertical',
 });
 
+generateContainerChart(document.getElementById('vertical-top-down-text') as HTMLElement, {
+    data: containerChartData,
+    orientation: 'vertical',
+    verticalTextTopDown: true,
+});
+
 generateContainerChart(document.getElementById('vertical-reversed') as HTMLElement, {
     data: containerChartData,
     reversed: true,

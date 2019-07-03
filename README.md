@@ -70,3 +70,6 @@ Padding in `px` between chart elements. `15` by default.
 
 * **select** `function(data)`\
 Function that will be executed when user clicks on chart element.
+
+* **verticalTextTopDown** `boolean`\
+`false` by default. Change text orientation to top-down when it is positioned vertically. 

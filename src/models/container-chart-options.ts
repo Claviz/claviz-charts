@@ -6,6 +6,7 @@ export interface ContainerChartOptions {
     reversed?: boolean;
     orientation?: 'horizontal' | 'vertical';
     select?: (data: any) => any;
+    verticalTextTopDown?: boolean;
 }
 
 export interface ContainerChartLineData {
