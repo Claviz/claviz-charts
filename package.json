@@ -1,6 +1,6 @@
 {
   "name": "claviz-charts",
-  "version": "0.0.12",
+  "version": "0.1.0",
   "description": "JavaScript charting library based on SVG.",
   "license": "MIT",
   "scripts": {
