@@ -55,6 +55,7 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
                 isHorizontal ? barSize : baseSize,
                 settings.data[i].label,
                 svg,
+                undefined,
                 false,
             );
             newBlocks.appendChild(lineLabelContainer);
@@ -74,7 +75,8 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
                     isHorizontal ? barWidth : barHeight,
                     isHorizontal ? barHeight : barWidth,
                     settings.data[i].data[j].label,
-                    svg
+                    svg,
+                    settings.data[i].data[j].tooltip,
                 );
                 barContainer.addEventListener('click', () => settings.select(settings.data[i].data[j]));
                 newBlocks.appendChild(barContainer);
@@ -109,7 +111,7 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
     return changeOptions;
 }
 
-function makeBar(x: number, y: number, color: string, width: number, height: number, label: string, svg: any, showTooltip: boolean = true) {
+function makeBar(x: number, y: number, color: string, width: number, height: number, label: string, svg: any, tooltip: string = label, showTooltip: boolean = true) {
     const barContainer = makeSVG('g', {
         transform:
             `translate(${x},${y})`
@@ -139,9 +141,9 @@ function makeBar(x: number, y: number, color: string, width: number, height: num
         barText.setAttribute('transform', `rotate(-90, ${width / 2}, ${height / 2})`);
         barContainer.appendChild(barText);
     }
-    if (showTooltip && label) {
+    if (showTooltip && tooltip) {
         tippy(barContainer, {
-            content: label,
+            content: tooltip,
             arrow: true,
             interactive: true,
             followCursor: 'horizontal',

@@ -6,7 +6,8 @@ const containerChartData = [
             {
                 "color": "#7bc043",
                 "label": "Oracle 2 (1.5 t)",
-                "value": 2
+                "value": 2,
+                "tooltip": "Custom tooltip",
             }
         ],
         "label": "line 1"

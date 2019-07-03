@@ -12,6 +12,7 @@ export interface ContainerChartLineData {
     color: string;
     label: string;
     value: number;
+    tooltip?: string;
 }
 
 export interface ContainerChartLine {

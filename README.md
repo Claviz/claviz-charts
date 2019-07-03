@@ -11,7 +11,8 @@ const options = {
                 {
                     "color": "#7bc043",
                     "label": "Apples",
-                    "value": 2
+                    "value": 2,
+                    "tooltip": "Custom tooltip"
                 }
             ],
             "label": "line 1"
@@ -45,6 +46,7 @@ Array of data to display.
     * **color** `string`
     * **label** `string`
     * **value** `number`
+    * **tooltip** `string`
 
 * **width** `number`\
 Width of the chart. By default it will be stretched to it's parent container's full width.
@@ -61,10 +63,10 @@ Padding in `px` between chart elements. `15` by default.
 * **reversed** `boolean`\
 `false` by default. Determines location of the line base:
     
-    | reversed | horizontal | vertical |
-    | -------- | ---------- | -------- |
-    | `false`  | left       | top      |
-    | `true`   | right      | bottom   |
+| reversed | horizontal | vertical |
+|----------|------------|----------|
+| `false`  | left       | top      |
+| `true`   | right      | bottom   |
 
 * **select** `function(data)`\
 Function that will be executed when user clicks on chart element.
