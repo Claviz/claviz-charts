@@ -41,6 +41,8 @@ generateContainerChart(parentElement, options);
 Array of data to display.
   * **label** `string`\
     Label of the line base.
+  * **color** `string`\
+    Color of the line base (default is `#d3d3d3`).    
   * **data** `object[]`\
     Array of line data.
     * **color** `string`

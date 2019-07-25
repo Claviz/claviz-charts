@@ -19,4 +19,5 @@ export interface ContainerChartLineData {
 export interface ContainerChartLine {
     data: ContainerChartLineData[];
     label: string;
+    color: string;
 }

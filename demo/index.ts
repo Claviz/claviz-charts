@@ -30,7 +30,8 @@ const containerChartData = [
                 "value": 4
             }
         ],
-        "label": "line 2"
+        "label": "line 2",
+        "color": "#ff0000",
     },
     {
         "data": [

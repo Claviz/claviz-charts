@@ -51,7 +51,7 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
             const lineLabelContainer = makeBar(
                 isHorizontal ? labelX : labelY,
                 isHorizontal ? labelY : labelX,
-                'lightgrey',
+                settings.data[i].color ? settings.data[i].color : '#d3d3d3',
                 isHorizontal ? baseSize : barSize,
                 isHorizontal ? barSize : baseSize,
                 settings.data[i].label,
