@@ -38,62 +38,64 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
 
     const onResize = (width: number, height: number) => {
         const maxLine = getMaxLine(settings.data);
-        const isHorizontal = settings.orientation === 'horizontal';
-        const dimension = isHorizontal ? (settings.width || width) : (settings.height || height);
-        const baseSize = getBaseSize(settings.data.map(x => x.label), isHorizontal ? 'width' : 'height', svg);
-        const pxPerValue = ((dimension - (baseSize + settings.padding)) - maxLine.line.data.length * settings.padding) / (maxLine.sum);
-        const barSize = ((isHorizontal ? (settings.height || height) : (settings.width || width)) - ((settings.data.length - 1) * settings.padding)) / settings.data.length;
+        if (maxLine) {
+            const isHorizontal = settings.orientation === 'horizontal';
+            const dimension = isHorizontal ? (settings.width || width) : (settings.height || height);
+            const baseSize = getBaseSize(settings.data.map(x => x.label), isHorizontal ? 'width' : 'height', svg);
+            const pxPerValue = ((dimension - (baseSize + settings.padding)) - maxLine.line.data.length * settings.padding) / (maxLine.sum);
+            const barSize = ((isHorizontal ? (settings.height || height) : (settings.width || width)) - ((settings.data.length - 1) * settings.padding)) / settings.data.length;
 
-        const newBlocks = makeSVG('g');
-        for (let i = 0; i < settings.data.length; i++) {
-            let pos = 0;
+            const newBlocks = makeSVG('g');
+            for (let i = 0; i < settings.data.length; i++) {
+                let pos = 0;
 
-            const labelX = settings.reversed ? dimension - baseSize : 0;
-            const labelY = i * (barSize + settings.padding);
-            const lineLabelContainer = makeBar(
-                isHorizontal ? labelX : labelY,
-                isHorizontal ? labelY : labelX,
-                settings.data[i].color ? settings.data[i].color : '#d3d3d3',
-                isHorizontal ? baseSize : barSize,
-                isHorizontal ? barSize : baseSize,
-                settings.data[i].label,
-                svg,
-                undefined,
-                settings.verticalTextTopDown,
-                false,
-            );
-            newBlocks.appendChild(lineLabelContainer);
-
-            for (let j = 0; j < settings.data[i].data.length; j++) {
-                const color = settings.data[i].data[j].color;
-                const barX = settings.reversed ?
-                    dimension - (pos + baseSize + settings.padding + settings.data[i].data[j].value * pxPerValue) :
-                    baseSize + settings.padding + pos;
-                const barY = i * (barSize + settings.padding);
-                const barWidth = settings.data[i].data[j].value * pxPerValue;
-                const barHeight = barSize;
-                const barContainer = makeBar(
-                    isHorizontal ? barX : barY,
-                    isHorizontal ? barY : barX,
-                    color,
-                    isHorizontal ? barWidth : barHeight,
-                    isHorizontal ? barHeight : barWidth,
-                    settings.data[i].data[j].label,
+                const labelX = settings.reversed ? dimension - baseSize : 0;
+                const labelY = i * (barSize + settings.padding);
+                const lineLabelContainer = makeBar(
+                    isHorizontal ? labelX : labelY,
+                    isHorizontal ? labelY : labelX,
+                    settings.data[i].color ? settings.data[i].color : '#d3d3d3',
+                    isHorizontal ? baseSize : barSize,
+                    isHorizontal ? barSize : baseSize,
+                    settings.data[i].label,
                     svg,
-                    settings.data[i].data[j].tooltip,
+                    undefined,
                     settings.verticalTextTopDown,
+                    false,
                 );
-                barContainer.addEventListener('click', () => settings.select(settings.data[i].data[j]));
-                newBlocks.appendChild(barContainer);
+                newBlocks.appendChild(lineLabelContainer);
 
-                pos += settings.data[i].data[j].value * pxPerValue + settings.padding;
+                for (let j = 0; j < settings.data[i].data.length; j++) {
+                    const color = settings.data[i].data[j].color;
+                    const barX = settings.reversed ?
+                        dimension - (pos + baseSize + settings.padding + settings.data[i].data[j].value * pxPerValue) :
+                        baseSize + settings.padding + pos;
+                    const barY = i * (barSize + settings.padding);
+                    const barWidth = settings.data[i].data[j].value * pxPerValue;
+                    const barHeight = barSize;
+                    const barContainer = makeBar(
+                        isHorizontal ? barX : barY,
+                        isHorizontal ? barY : barX,
+                        color,
+                        isHorizontal ? barWidth : barHeight,
+                        isHorizontal ? barHeight : barWidth,
+                        settings.data[i].data[j].label,
+                        svg,
+                        settings.data[i].data[j].tooltip,
+                        settings.verticalTextTopDown,
+                    );
+                    barContainer.addEventListener('click', () => settings.select(settings.data[i].data[j]));
+                    newBlocks.appendChild(barContainer);
+
+                    pos += settings.data[i].data[j].value * pxPerValue + settings.padding;
+                }
             }
+            svg.setAttribute('height', height.toString());
+            while (svg.firstChild) {
+                svg.firstChild.remove();
+            }
+            svg.appendChild(newBlocks);
         }
-        svg.setAttribute('height', height.toString());
-        while (svg.firstChild) {
-            svg.firstChild.remove();
-        }
-        svg.appendChild(newBlocks);
     };
 
     new ResizeSensor(parentElement, (x) => {
