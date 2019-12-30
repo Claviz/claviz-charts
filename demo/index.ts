@@ -74,6 +74,10 @@ generateContainerChart(document.getElementById('full-width') as HTMLElement, {
     data: containerChartData,
 });
 
+generateContainerChart(document.getElementById('resizable') as HTMLElement, {
+    data: containerChartData,
+});
+
 generateContainerChart(document.getElementById('reversed') as HTMLElement, {
     data: containerChartData,
     reversed: true

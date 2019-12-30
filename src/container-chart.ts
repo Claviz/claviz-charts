@@ -1,9 +1,12 @@
-import { ContainerChartOptions, ContainerChartLine } from './models/container-chart-options';
-import { makeSVG, getBox } from './utils';
-import { TinyColor } from '@ctrl/tinycolor';
-import tippy from 'tippy.js';
-import 'tippy.js/themes/light-border.css';
 import './styles.css';
+import 'tippy.js/themes/light-border.css';
+
+import { TinyColor } from '@ctrl/tinycolor';
+import { ResizeSensor } from 'css-element-queries';
+import tippy from 'tippy.js';
+
+import { ContainerChartLine, ContainerChartOptions } from './models/container-chart-options';
+import { getBox, makeSVG } from './utils';
 
 function getMaxLine(data: ContainerChartLine[]): { line: ContainerChartLine, sum: number } {
     const lineData: { line: ContainerChartLine, sum: number }[] = [];
@@ -33,14 +36,13 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
     const svg = makeSVG('svg', { class: 'chart' });
     parentElement.appendChild(svg);
 
-    let parentDimensions = parentElement.getBoundingClientRect();
-    const onResize = () => {
+    const onResize = (width: number, height: number) => {
         const maxLine = getMaxLine(settings.data);
         const isHorizontal = settings.orientation === 'horizontal';
-        const dimension = isHorizontal ? (settings.width || parentDimensions.width) : (settings.height || parentDimensions.height);
+        const dimension = isHorizontal ? (settings.width || width) : (settings.height || height);
         const baseSize = getBaseSize(settings.data.map(x => x.label), isHorizontal ? 'width' : 'height', svg);
         const pxPerValue = ((dimension - (baseSize + settings.padding)) - maxLine.line.data.length * settings.padding) / (maxLine.sum);
-        const barSize = ((isHorizontal ? (settings.height || parentDimensions.height) : (settings.width || parentDimensions.width)) - ((settings.data.length - 1) * settings.padding)) / settings.data.length;
+        const barSize = ((isHorizontal ? (settings.height || height) : (settings.width || width)) - ((settings.data.length - 1) * settings.padding)) / settings.data.length;
 
         const newBlocks = makeSVG('g');
         for (let i = 0; i < settings.data.length; i++) {
@@ -87,17 +89,16 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
                 pos += settings.data[i].data[j].value * pxPerValue + settings.padding;
             }
         }
-        svg.setAttribute('height', parentDimensions.height.toString());
+        svg.setAttribute('height', height.toString());
         while (svg.firstChild) {
             svg.firstChild.remove();
         }
         svg.appendChild(newBlocks);
     };
 
-    window.addEventListener('resize', () => {
-        parentDimensions = parentElement.getBoundingClientRect();
-        if ((!settings.width || !settings.height) && parentDimensions.height && parentDimensions.width) {
-            onResize();
+    new ResizeSensor(parentElement, (x) => {
+        if ((!settings.width || !settings.height) && x.height && x.width) {
+            onResize(x.width, x.height);
         }
     });
 
@@ -106,7 +107,8 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
             ...settings,
             ...newOptions,
         };
-        onResize();
+        const rect = parentElement.getBoundingClientRect();
+        onResize(rect.width, rect.height);
     }
 
     changeOptions(options);

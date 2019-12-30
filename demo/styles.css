@@ -1,7 +1,17 @@
 .chart-wrapper {
-    border: 1px dashed black;
+  border: 1px dashed black;
 }
 
 body {
-    font-family: sans-serif;
+  font-family: sans-serif;
+}
+
+.resizable {
+  height: 400px;
+  resize: both;
+  width: 500px;
+  min-width: 100px;
+  min-height: 100px;
+  overflow: hidden;
+  margin: auto;
 }
