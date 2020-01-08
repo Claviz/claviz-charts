@@ -43,7 +43,7 @@ Array of data to display.
     Label of the line base.
   * **color** `string`\
     Color of the line base (default is `#d3d3d3`).    
-  * **styles** `object`\
+  * **style** `string`\
     Custom CSS styles.
   * **data** `object[]`\
     Array of line data.
@@ -51,7 +51,7 @@ Array of data to display.
     * **label** `string`
     * **value** `number`
     * **tooltip** `string`
-    * **styles** `object`
+    * **style** `string`
 
 * **width** `number`\
 Width of the chart. By default it will be stretched to it's parent container's full width.

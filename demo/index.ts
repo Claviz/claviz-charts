@@ -52,11 +52,7 @@ const containerChartData = [
             }
         ],
         "label": "line 4",
-        "styles": {
-            "font-size": "20px",
-            "font-family": "Arial",
-            "font-weight": 800
-        }
+        "style": `font-size: 20px; font-family: Arial; font-weight: 800;`
     },
     {
         "data": [
@@ -64,11 +60,7 @@ const containerChartData = [
                 "color": "#000",
                 "label": "Heisenbug 20 (0 t)",
                 "value": 20,
-                "styles": {
-                    "font-size": "20px",
-                    "font-family": "Arial",
-                    "font-weight": 800
-                }
+                "style": `font-size: 20px; font-family: Arial; font-weight: 800;`
             },
         ],
         "label": "line 5"

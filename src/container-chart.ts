@@ -62,7 +62,7 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
                     undefined,
                     settings.verticalTextTopDown,
                     false,
-                    settings.data[i].styles,
+                    settings.data[i].style,
                 );
                 newBlocks.appendChild(lineLabelContainer);
 
@@ -85,7 +85,7 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
                         settings.data[i].data[j].tooltip,
                         settings.verticalTextTopDown,
                         true,
-                        settings.data[i].data[j].styles,
+                        settings.data[i].data[j].style,
                     );
                     barContainer.addEventListener('click', () => settings.select(settings.data[i].data[j]));
                     newBlocks.appendChild(barContainer);
@@ -121,7 +121,7 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
     return changeOptions;
 }
 
-function makeBar(x: number, y: number, color: string, width: number, height: number, label: string, svg: any, tooltip: string = label, verticalTextTopDown: boolean, showTooltip: boolean = true, styles?: any) {
+function makeBar(x: number, y: number, color: string, width: number, height: number, label: string, svg: any, tooltip: string = label, verticalTextTopDown: boolean, showTooltip: boolean = true, style: string = '') {
     const barContainer = makeSVG('g', {
         transform:
             `translate(${x},${y})`
@@ -142,7 +142,7 @@ function makeBar(x: number, y: number, color: string, width: number, height: num
         'dominant-baseline': 'middle',
         'text-anchor': 'middle',
         fill: fontColor,
-        ...styles,
+        style,
     });
     barText.innerHTML = `${label}`;
     const dimensions = getBox(barText, svg);
