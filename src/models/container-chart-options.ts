@@ -14,10 +14,12 @@ export interface ContainerChartLineData {
     label: string;
     value: number;
     tooltip?: string;
+    styles?: any;
 }
 
 export interface ContainerChartLine {
     data: ContainerChartLineData[];
     label: string;
     color: string;
+    styles?: any;
 }
