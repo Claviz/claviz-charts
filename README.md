@@ -44,7 +44,7 @@ Array of data to display.
   * **color** `string`\
     Color of the line base (default is `#d3d3d3`).    
   * **style** `string`\
-    Custom CSS styles.
+    Custom CSS styles of the label.
   * **data** `object[]`\
     Array of line data.
     * **color** `string`
