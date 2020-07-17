@@ -53,12 +53,6 @@ Array of data to display.
     * **tooltip** `string`
     * **style** `string`
 
-* **width** `number`\
-Width of the chart. By default it will be stretched to it's parent container's full width.
-
-* **height** `number`\
-Height of the chart. By default it will be stretched to it's parent container's full height.
-
 * **padding** `number`\
 Padding in `px` between chart elements. `15` by default.
     

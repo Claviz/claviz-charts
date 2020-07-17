@@ -8,19 +8,30 @@
 
 <body>
     <h3>Container chart</h3>
-    <h4>Fixed width</h4>
-    <div id="fixed-width" class="chart-wrapper" style="height: 500px"></div>
-    <h4>Full width</h4>
+
+    <h4>Default</h4>
+    <div id="no-size" class="chart-wrapper"></div>
+
+    <h4>With { height: 500px; width: 500px; }</h4>
+    <div id="fixed-size" class="chart-wrapper" style="height: 500px; width: 500px;"></div>
+
+    <h4>With { height: 500px; }</h4>
     <div id="full-width" class="chart-wrapper" style="height: 500px"></div>
+
     <h4>Resizable</h4>
     <div id="resizable" class="chart-wrapper resizable"></div>
+
     <h4>Reversed</h4>
-    <div id="reversed" class="chart-wrapper" style="height: 500px"></div>
+    <div id="reversed" class="chart-wrapper"></div>
+
     <h4>Vertical</h4>
-    <div id="vertical" class="chart-wrapper" style="height: 500px"></div>
-    <h4>Vertical with top-down text orienation</h4>
-    <div id="vertical-top-down-text" class="chart-wrapper" style="height: 500px"></div>
-    <h4>Vertical reversed with click event (alert)</h4>
-    <div id="vertical-reversed" class="chart-wrapper" style="height: 500px"></div>
+    <div id="vertical" class="chart-wrapper"></div>
+
+    <h4>Vertical with top-down text orienation and { height: 500px; width: 300px; }</h4>
+    <div id="vertical-top-down-text" class="chart-wrapper" style="height: 500px; width: 300px;"></div>
+
+    <h4>Vertical reversed with click event (alert) and { height: 500px; width: 300px; }</h4>
+    <div id="vertical-reversed" class="chart-wrapper" style="height: 500px; width: 300px;"></div>
+
     <script src="./build/index.bundle.js"></script>
 </body>

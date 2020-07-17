@@ -67,8 +67,7 @@ const containerChartData = [
     }
 ];
 
-generateContainerChart(document.getElementById('fixed-width') as HTMLElement, {
-    width: 500,
+generateContainerChart(document.getElementById('fixed-size') as HTMLElement, {
     data: containerChartData,
 });
 
@@ -101,4 +100,8 @@ generateContainerChart(document.getElementById('vertical-reversed') as HTMLEleme
     reversed: true,
     orientation: 'vertical',
     select: (data) => alert(JSON.stringify(data)),
+});
+
+generateContainerChart(document.getElementById('no-size') as HTMLElement, {
+    data: containerChartData,
 });

@@ -22,9 +22,8 @@ function getMaxLine(data: ContainerChartLine[]): { line: ContainerChartLine, sum
 };
 
 export function generateContainerChart(parentElement: HTMLElement, options: ContainerChartOptions) {
+    const initialRect = parentElement.getBoundingClientRect();
     let settings = {
-        width: 0,
-        height: 0,
         padding: 15,
         data: [] as ContainerChartLine[],
         reversed: false,
@@ -40,10 +39,10 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
         const maxLine = getMaxLine(settings.data);
         if (maxLine) {
             const isHorizontal = settings.orientation === 'horizontal';
-            const dimension = isHorizontal ? (settings.width || width) : (settings.height || height);
+            const dimension = isHorizontal ? width : height;
             const baseSize = getBaseSize(settings.data.map(x => x.label), isHorizontal ? 'width' : 'height', svg);
             const pxPerValue = ((dimension - (baseSize + settings.padding)) - maxLine.line.data.length * settings.padding) / (maxLine.sum);
-            const barSize = ((isHorizontal ? (settings.height || height) : (settings.width || width)) - ((settings.data.length - 1) * settings.padding)) / settings.data.length;
+            const barSize = ((isHorizontal ? height : width) - ((settings.data.length - 1) * settings.padding)) / settings.data.length;
 
             const newBlocks = makeSVG('g');
             for (let i = 0; i < settings.data.length; i++) {
@@ -101,12 +100,6 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
         }
     };
 
-    new ResizeSensor(parentElement, (x) => {
-        if ((!settings.width || !settings.height) && x.height && x.width) {
-            onResize(x.width, x.height);
-        }
-    });
-
     function changeOptions(newOptions: ContainerChartOptions) {
         settings = {
             ...settings,
@@ -117,6 +110,13 @@ export function generateContainerChart(parentElement: HTMLElement, options: Cont
     }
 
     changeOptions(options);
+
+    const shouldResizeHeight = initialRect.height === parentElement.getBoundingClientRect().height;
+    new ResizeSensor(parentElement, (x) => {
+        if (x.height && x.width) {
+            onResize(x.width, shouldResizeHeight ? x.height : svg.getBoundingClientRect().height);
+        }
+    });
 
     return changeOptions;
 }
